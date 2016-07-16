@@ -1,0 +1,59 @@
+[33mcommit 20aeb08eebf0bcee06ef03136c9b341ccdb26e45[m
+Author: Filipe Silva <filipematossilva@gmail.com>
+Date:   Tue Jul 12 19:29:52 2016 +0100
+
+    chore(tests): add single run mode
+
+[1mdiff --git a/.travis.yml b/.travis.yml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a203962[m
+[1m--- /dev/null[m
+[1m+++ b/.travis.yml[m
+[36m@@ -0,0 +1,20 @@[m
+[32m+[m[32mdist: trusty[m
+[32m+[m[32msudo: required[m
+[32m+[m[32mlanguage: node_js[m
+[32m+[m[32mnode_js:[m
+[32m+[m[32m  - "5"[m
+[32m+[m[32mos:[m
+[32m+[m[32m  - linux[m
+[32m+[m[32menv:[m
+[32m+[m[32m  global:[m
+[32m+[m[32m    - DBUS_SESSION_BUS_ADDRESS=/dev/null[m
+[32m+[m[32m    - DISPLAY=:99.0[m
+[32m+[m[32m    - CHROME_BIN=chromium-browser[m
+[32m+[m[32mbefore_script:[m
+[32m+[m[32m  - sh -e /etc/init.d/xvfb start[m
+[32m+[m[32minstall:[m
+[32m+[m[32m  - npm install[m
+[32m+[m[32mscript:[m
+[32m+[m[32m  - npm run lint[m
+[32m+[m[32m  - npm run test-once[m[41m [m
+[32m+[m[32m  - npm run e2e[m
+[1mdiff --git a/package.json b/package.json[m
+[1mindex b69f0f3..a8a16fe 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -7,11 +7,12 @@[m
+     "docker-build": "docker build -t ng2-quickstart .",[m
+     "docker": "npm run docker-build && docker run -it --rm -p 3000:3000 -p 3001:3001 ng2-quickstart",[m
+     "pree2e": "npm run webdriver:update",[m
+[31m-    "e2e": "tsc && concurrently \"http-server\" \"protractor protractor.config.js\"",[m
+[32m+[m[32m    "e2e": "tsc && concurrently \"http-server -s\" \"protractor protractor.config.js\" --kill-others --success first",[m
+     "lint": "tslint ./app/**/*.ts -t verbose",[m
+     "lite": "lite-server",[m
+     "postinstall": "typings install",[m
+     "test": "tsc && concurrently \"tsc -w\" \"karma start karma.conf.js\"",[m
+[32m+[m[32m    "test-once": "tsc && karma start karma.conf.js --single-run",[m
+     "tsc": "tsc",[m
+     "tsc:w": "tsc -w",[m
+     "typings": "typings",[m
+[36m@@ -42,7 +43,7 @@[m
+     "bootstrap": "^3.3.6"[m
+   },[m
+   "devDependencies": {[m
+[31m-    "concurrently": "^2.0.0",[m
+[32m+[m[32m    "concurrently": "^2.2.0",[m
+     "lite-server": "^2.2.0",[m
+     "typescript": "^1.8.10",[m
+     "typings": "^1.0.4",[m
